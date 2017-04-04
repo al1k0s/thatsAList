@@ -13,7 +13,7 @@ class List {
         type value;
         Node * next, * prev;
 
-        Node(type value, List::Node *next, List::Node *prev) : value(value), next(next), prev(prev) {}
+        Node(type value, List::Node *prev, List::Node *next) : value(value), next(next), prev(prev) {}
     };
     
     Node* root;
@@ -67,16 +67,14 @@ public:
 
     List() : root(nullptr), size(0) {}
 
-    List(int count){
-        root = (Node*) malloc(count * sizeof(Node));
-        Node* tmp1 = root, * tmp2;
-        root->prev= nullptr;
-        for (int i = 0; i < count ; ++i) {
-            tmp2 = tmp1++;
-            tmp1->prev = tmp2;
+    List(uint32_t count){
+        root = new Node(0, nullptr, nullptr);
+        Node *tmp1 = root, *tmp2;
+        for (int i = 0; i < count - 1; ++i) {
+            tmp2 = tmp1;
+            tmp1 = new Node(0, tmp2, nullptr);
             tmp2->next = tmp1;
         }
-        tmp1->next = nullptr;
         size = count;
     }
 
@@ -105,7 +103,7 @@ public:
         Node* ptr1 = root, *ptr2;
         while (ptr1->next != nullptr) {
             ptr2 = ptr1;
-            ptr1++;
+            ptr1 = ptr1->next;
             delete ptr2;
         }
     }
